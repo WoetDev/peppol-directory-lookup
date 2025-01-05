@@ -11,12 +11,9 @@ class PeppolDirectoryLookup {
   /**
    * Lookup PEPPOL participant information for a list of company numbers
    * @param {string[]} companyNumbers - Array of company registration numbers to check
-   * @param {Object} [options] - Optional configuration
-   * @param {number} [options.batchSize=50] - Number of company numbers to check in parallel
    * @returns {Promise<Object>} - Object with registered and unregistered company numbers
    */
-  async lookupParticipants(companyNumbers, options = {}) {
-    const batchSize = 5;
+  async lookupParticipants(companyNumbers) {
     const results = {
       registered: [],
       unregistered: [],
@@ -65,7 +62,7 @@ class PeppolDirectoryLookup {
           console.warn(`Rate limited, waiting ${retryAfter}s before retry...`);
           await delay(retryAfter * 1000);
           // Retry the request
-          return this.lookupParticipants([companyNumber], options);
+          return this.lookupParticipants([companyNumber]);
         }
 
         // Handle 404 errors (company not found)
